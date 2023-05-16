@@ -11,7 +11,7 @@ C#, Javascript, HTML, CSS
 
 # Design Goals
 * Cross platform 
-* Easy to setup and use - handle complexity internally if possible
+* Easy to setup and use 
 * Use standard/accepted UI design practices - i.e. shortcuts
 * Web browser GUI if feasible
 * Modular - mail client, modems, radio control, etc.
