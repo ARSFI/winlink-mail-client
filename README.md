@@ -4,7 +4,12 @@ Open source email client program for the winlink radio email system
 # Development Tools
 C#, Javascript, HTML, CSS
 
-Embedded web server - possible candidates are 
+# Design Goals
+* Cross platform 
+* Web browser GUI if feasible
+* Modular - mail client, modems, radio control, etc.
+
+Embedded web server - some possible candidates
 * https://github.com/unosquare/embedio
 * https://mongoose.ws/ 
 
@@ -15,5 +20,3 @@ Google Chrome, Apple Safari, Microsoft Edge, and Mozilla Firefox
 Similar cabilities as Winlink Express
 
 
-# Design Goals
-Modular
