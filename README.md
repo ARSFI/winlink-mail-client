@@ -6,6 +6,8 @@ C#, Javascript, HTML, CSS
 
 # Design Goals
 * Cross platform 
+* Easy to setup and use - handle complexity internally if possible
+* Use standart/accepted UI design - i.e. shortcuts
 * Web browser GUI if feasible
 * Modular - mail client, modems, radio control, etc.
 
@@ -18,5 +20,4 @@ Google Chrome, Apple Safari, Microsoft Edge, and Mozilla Firefox
 
 # Desired Features
 Similar cabilities as Winlink Express
-
 
