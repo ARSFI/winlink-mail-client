@@ -1,4 +1,4 @@
-# winlink-mail-client
+# A Winlink Mail Client
 Open source email client program for the winlink radio email system
 
 Now's your chance to help design a new corss-platform email client for Winlink. 
