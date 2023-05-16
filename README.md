@@ -12,7 +12,7 @@ C#, Javascript, HTML, CSS
 # Design Goals
 * Cross platform 
 * Easy to setup and use - handle complexity internally if possible
-* Use standart/accepted UI design - i.e. shortcuts
+* Use standard/accepted UI design practices - i.e. shortcuts
 * Web browser GUI if feasible
 * Modular - mail client, modems, radio control, etc.
 
@@ -24,5 +24,5 @@ Embedded web server - some possible candidates
 Google Chrome, Apple Safari, Microsoft Edge, and Mozilla Firefox
 
 # Desired Features
-Similar cabilities as Winlink Express
+
 
