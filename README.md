@@ -1,4 +1,4 @@
-# A Winlink Mail Client
+# An Open Source Winlink Mail Client
 Open source email client program for the winlink radio email system
 
 Run on Windows, Linux (a limited number of distributions), MacOS, Others
