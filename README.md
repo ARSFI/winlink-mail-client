@@ -8,4 +8,4 @@ Initially, this repository will be concerned with gathering ideas - your ideas.
 You can submit new ideas, comment on what others have suggested, or even tell us what you don't want.
 Use the 'Issues' menu item to open a page where you can make your suggestions and comments.
 
-The wiki (https://github.com/ARSFI/winlink-mail-client/wiki) will be updated to reflect your suggestions.
+The [wiki](https://github.com/ARSFI/winlink-mail-client/wiki) will be updated to reflect your suggestions.
