@@ -1,5 +1,5 @@
 # An Open Source Winlink Mail Client
-Open source email program for the winlink radio email system
+Open source cross platform email program for the winlink radio email system
 
 Now's your chance to help design a new cross-platform email client for Winlink. 
 Initially, this repository will be concerned with gathering ideas - your ideas. 
