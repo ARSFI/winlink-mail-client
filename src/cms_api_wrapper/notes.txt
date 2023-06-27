@@ -1,0 +1,29 @@
+The below API classes are enabled for use with the issued access key starting with "005720":
+
+x AccountAdd,
+x AccountAlternateEmailGet
+x AccountAlternateEmailSet
+x AccountExists,
+x AccountLockedOutGet
+x AccountLockedOutReasonGet
+AccountMaxMessageSizeGet,
+AccountMaxMessageSizeSet,
+x AccountPasswordChange,
+x AccountPasswordRecoveryEmailGet,
+x AccountPasswordRecoveryEmailSet,
+AccountPasswordSend,
+AccountPasswordValidate,
+AccountTacticalAdd,
+AccountTacticalExists,
+AccountTacticalRemove,
+ChannelList,
+GatewayStatus,
+InquiriesCatalog,
+SessionAdd,
+SysopAdd,
+Sysop2Get,
+WhitelistAdd,
+WhitelistDelete,
+WhitelistGet
+
+

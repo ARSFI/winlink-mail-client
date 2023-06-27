@@ -1,0 +1,2 @@
+class CmsApiException(Exception):
+    pass
