@@ -11,6 +11,16 @@ class AccountExistsResponse(WebServiceResponse):
         self.exists: bool = result.data["CallsignExists"]
 
 
+class ValidatePasswordResponse(WebServiceResponse):
+    def __init__(self, result: ApiResult):
+        """
+        Deconstructs the response to expose the 'IsValid' api result.
+        :param result: The result of the API request
+        """
+        super().__init__(result)
+        self.is_valid: bool = result.data["IsValid"]
+
+
 class ForwardingAddressResponse(WebServiceResponse):
     def __init__(self, result: ApiResult):
         """
@@ -75,6 +85,14 @@ class Account:
         params = {"Callsign": callsign, "OldPassword": old_password, "NewPassword": new_password}
         result = await self.cms_api.post("account/password/change/", params)
         return WebServiceResponse(result)
+
+    async def validate_password(self, callsign: str, password: str):
+        """
+        Verifies that the password is valid for this account
+        """
+        params = {"Callsign": callsign, "Password": password}
+        result = await self.cms_api.post("account/password/validate/", params)
+        return ValidatePasswordResponse(result)
 
     async def get_forwarding_email_address(self, callsign: str, password: str):
         """
