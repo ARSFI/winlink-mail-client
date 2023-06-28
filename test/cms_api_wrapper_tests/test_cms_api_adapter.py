@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from src.cms_api_wrapper.cms_api_adapter import *
 
-# TODO: Resolve warnings and verify that tests are working properly
+# TODO: Resolve test warnings and verify that tests are working properly
 
 
 class TestCmsApiAdapter(TestCase):
