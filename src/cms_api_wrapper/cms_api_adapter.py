@@ -1,11 +1,10 @@
+import json
 import logging
 from http import HTTPStatus
 from json import JSONDecodeError
+from types import SimpleNamespace
 from typing import List, Dict
-
 import httpx
-
-from src.cms_api_wrapper.exceptions import *
 
 
 class ApiResult:
@@ -66,53 +65,60 @@ class CmsApiAdapter:
         :return: a Result object
         """
         full_url = self.url + endpoint
-        # Create dictionary for params if not supplied
+        # Create dictionary for params if not supplied.
         if ep_params is None:
             ep_params = {}
         ep_params["key"] = self.api_key
         ep_params["format"] = "json"
         log_line_pre = f"method={http_method}, url={full_url}, params={ep_params}"
 
-        # Log HTTP params and perform an HTTP request, catching and re-raising any exceptions
+        # Log HTTP params and perform an HTTP request, catching and re-raising any exceptions.
         try:
             self._logger.debug(msg=log_line_pre)
 
             async with httpx.AsyncClient(verify=False) as client:
                 response = await client.request(method=http_method, url=full_url, params=ep_params, json=data)
 
-        # response = await httpx.request(method=http_method, url=full_url, verify=False, params=ep_params, json=data)
-
         except httpx.RequestError as e:
             self._logger.error(msg=(str(e)))
-            raise CmsApiException("Request failed") from e
+            raise Exception("Request failed") from e
 
-        # Deserialize JSON output to Python object, or return failed Result on exception
+        # Get JSON result, or return failed result on exception.
         try:
             data_out = response.json()
         except (ValueError, JSONDecodeError) as e:
             log_line = ', '.join((log_line_pre, f"success={False}, status_code={None}, message={e}"))
             self._logger.error(msg=log_line)
-            raise CmsApiException("Bad JSON in response") from e
+            raise Exception("Bad JSON in response") from e
+
         is_success = 299 >= response.status_code >= 200  # 200 to 299 is OK
         log_line = ', '.join((log_line_pre, f"success={is_success}, status_code={response.status_code}"))
 
         # If status_code in 200-299 range, return API result status and data, otherwise raise exception
         if is_success:
-            self._logger.debug(msg=log_line)
-            # Unpack response status returned from API call
+            # Unpack response status returned from API call.
             response_status = ResponseStatus(data_out["ResponseStatus"])
-            # Remove response status from data list
+            # Remove response status from data list -- data_out will just be the requested information.
             del data_out["ResponseStatus"]
 
             return ApiResult(response_status.api_error_code, response_status.api_error_message, data=data_out)
-        self._logger.error(msg=log_line)
+        elif response.status_code == 400:
+            """
+            API validation error - extract the response status object
+            """
+            jo = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+            # Return validation error status
+            return ApiResult(jo.ResponseStatus.ErrorCode, jo.ResponseStatus.Message)
 
+        # Try to find the expanded HTTP error text.
         try:
             reason = HTTPStatus(response.status_code).phrase
         except ValueError:
-            raise CmsApiException(f"Invalid HTTP status code:{response.status_code}")
+            reason = f"Unknown HTTP status code: {response.status_code}"
 
-        raise CmsApiException(f"{response.status_code}: {reason}")
+        # Some other error - log it
+        self._logger.error(msg=log_line)
+        raise Exception(str(response.status_code), reason)
 
     async def get(self, endpoint: str, params: Dict = None) -> ApiResult:
         """
@@ -125,3 +131,5 @@ class CmsApiAdapter:
         Make an HTTP POST request
         """
         return await self._do(http_method='POST', endpoint=endpoint, ep_params=params, data=data)
+
+    # Could also do PUT and DELETE, but the CMS API doesn't support those HTTP verbs

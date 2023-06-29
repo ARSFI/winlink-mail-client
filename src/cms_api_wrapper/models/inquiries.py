@@ -1,11 +1,12 @@
 from src.cms_api_wrapper.cms_api_adapter import *
+from src.cms_api_wrapper.models.constants import *
 
 
 class InquiryRecord:
     def __init__(self, category, inquiry_id, subject, size_estimate):
         self.category: str = category
         self.inquiry_id: str = inquiry_id
-        self.description: str = subject
+        self.subject: str = subject
         self.size_estimate: int = size_estimate
 
 
@@ -33,7 +34,7 @@ class Inquires:
     """
     Provides methods and classes relating winlink inquires
     """
-    def __init__(self, api_key: str, hostname: str = 'api.winlink.org', logger: logging.Logger = None):
+    def __init__(self, api_key: str, hostname: str = CMS_API_HOSTNAME, logger: logging.Logger = None):
         self.cms_api = CmsApiAdapter(api_key, hostname, logger)
 
     async def catalog_get(self):

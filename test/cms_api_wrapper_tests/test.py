@@ -3,7 +3,6 @@ from src.cms_api_wrapper.models.inquiries import *
 
 import asyncio
 # import logging
-import json
 import os
 from dotenv import load_dotenv
 
@@ -23,26 +22,41 @@ password = "CTCH22"
 async def main():
     account = Account(api_key, hostname)
 
-    # might have to manually delete the account for this first action to succeed
-    # if the test was already run today. The test db is refreshed daily
+    # if the test was already run today might have to manually delete the account
+    # for this first action to succeed. The test db is refreshed daily.
+    print(f"Adding account {callsign2}")
     result = await account.add_callsign_account(callsign2, password)
-    print(f"Add account {callsign2} Has error: {result.has_error} -- Error: {result.error_code}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
 
     # this one should fail once the new api version is pushed
     print(f"Adding account {callsign2}")
     result = await account.add_callsign_account(callsign2, password)
-    print(f"Add account {callsign2} Has error: {result.has_error} -- Error: {result.error_code}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
 
     result = await account.validate_password(callsign, password)
-    print(f"Password check for: {callsign}/{password} is valid: {result.is_valid}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Password check for: {callsign}/{password} is valid: {result.is_valid}")
     result = await account.validate_password(callsign, "BadPass")
-    print(f"Password check for: {callsign}/BadPass is valid: {result.is_valid}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Password check for: {callsign}/BadPass is valid: {result.is_valid}")
 
     #
     result = await account.account_exists(callsign)
-    print(f"Account '{callsign}' exists: {result.exists}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Account '{callsign}' exists: {result.exists}")
     result = await account.account_exists("DU0MMY")
-    print(f"Account 'DU0MMY' exists: {result.exists}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Account 'DU0MMY' exists: {result.exists}")
 
     #
     # await account.change_account_password(callsign, password, "ABC123")
@@ -68,10 +82,16 @@ async def main():
 
     test_callsign = "AA7NG"
     result = await account.get_locked_out(test_callsign)
-    print(f"Account {test_callsign} is locked out: {result.is_locked_out} -- Reason: {result.reason}")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Account {test_callsign} is locked out: {result.is_locked_out} -- Reason: {result.reason}")
 
-    inquiries= Inquires(api_key, hostname)
+    inquiries = Inquires(api_key, hostname)
     result = await inquiries.catalog_get()
-    print(f"{len(result.inquiries)} items in the inquiry list")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"{len(result.inquiries)} items in the inquiry list")
 
 asyncio.run(main())

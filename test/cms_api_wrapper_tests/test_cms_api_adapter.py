@@ -30,14 +30,14 @@ class TestCmsApiAdapter(TestCase):
         self.response.status_code = 300
         self.response._content = '{"ResponseStatus":{}}'.encode()
         with mock.patch("httpx.request", return_value=self.response):
-            with self.assertRaises(CmsApiException):
+            with self.assertRaises(Exception):
                 await self.api_adapter._do('GET', '')
 
     async def test__do_199_or_lower_raises_cms_api_exception(self):
         self.response.status_code = 199
         self.response._content = '{"ResponseStatus":{}}'.encode()
         with mock.patch("httpx.request", return_value=self.response):
-            with self.assertRaises(CmsApiException):
+            with self.assertRaises(Exception):
                 await self.api_adapter._do('GET', '')
 
     async def test__do_bad_json_raises_type_error_exception(self):

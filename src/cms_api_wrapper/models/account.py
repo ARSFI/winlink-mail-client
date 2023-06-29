@@ -1,5 +1,5 @@
 from src.cms_api_wrapper.cms_api_adapter import *
-
+from src.cms_api_wrapper.models.constants import *
 
 class AccountExistsResponse(WebServiceResponse):
     def __init__(self, result: ApiResult):
@@ -58,7 +58,7 @@ class Account:
     """
     Provides methods and classes relating to a callsign (or sometimes a tactical) account
     """
-    def __init__(self, api_key: str, hostname: str = 'api.winlink.org', logger: logging.Logger = None):
+    def __init__(self, api_key: str, hostname: str = CMS_API_HOSTNAME, logger: logging.Logger = None):
         self.cms_api = CmsApiAdapter(api_key, hostname, logger)
 
     async def account_exists(self, callsign: str) -> AccountExistsResponse:
