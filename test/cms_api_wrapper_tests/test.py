@@ -1,4 +1,5 @@
 from src.cms_api_wrapper.models.account import *
+from src.cms_api_wrapper.models.sysop import *
 from src.cms_api_wrapper.models.inquiries import *
 
 import asyncio
@@ -73,19 +74,39 @@ async def main():
     # print(json.dumps(result.__dict__))
     # result = await account.get_password_recovery_email_address(callsign, password)
     # print(result.recovery_address)
-    # result = await account.set_password_recovery_email_address(callsign, password, "lee@iqed.net")
-    # print(json.dumps(result.__dict__))
     #
-    # result = await account.get_locked_out(callsign)
-    # print(json.dumps(result.__dict__))
-    #
+
+    result = await account.set_password_recovery_email_address(callsign, password, "lee@iqed.net")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    result = await account.send_password(callsign)
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Requested that password for {callsign} be sent to  the recovery address.")
+
+    # Should get an error if no recovery address is set
+    await account.set_password_recovery_email_address(callsign, password, "")
+    result = await account.send_password(callsign)
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Requested that password for {callsign} be sent to  the recovery address.")
 
     test_callsign = "AA7NG"
     result = await account.get_locked_out(test_callsign)
     if result.has_error:
         print(f"Error: {result.error_code}/{result.error_message}")
     else:
-        print(f"Account {test_callsign} is locked out: {result.is_locked_out} -- Reason: {result.reason}")
+        print(f"Account {test_callsign} is locked out: {result.is_locked_out} -- Reason: {result.lockout_reason}")
+
+    await account.set_max_message_size(callsign, 105)
+    result = await account.get_max_message_size(callsign)
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Max message size: {result.max_message_size}")
+    await account.set_max_message_size(callsign, 120)
 
     inquiries = Inquires(api_key, hostname)
     result = await inquiries.catalog_get()
@@ -93,5 +114,16 @@ async def main():
         print(f"Error: {result.error_code}/{result.error_message}")
     else:
         print(f"{len(result.inquiries)} items in the inquiry list")
+
+    sysop = Sysop(api_key, hostname)
+    result = await sysop.sysop_add(callsign, password, "Ham Tester", "DM78QX", "account.email@home.com")
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+
+    result = await sysop.sysop_get(callsign, password)
+    if result.has_error:
+        print(f"Error: {result.error_code}/{result.error_message}")
+    else:
+        print(f"Sysop: {result.sysop_record.sysop_name}")
 
 asyncio.run(main())

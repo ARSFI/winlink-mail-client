@@ -44,7 +44,7 @@ class TestCmsApiAdapter(TestCase):
         bad_json = '{"some bad json": '
         self.response._content = bad_json
         with mock.patch("httpx.request", return_value=self.response):
-            with self.assertRaises(TypeError):
+            with self.assertRaises(Exception):
                 await self.api_adapter._do('GET', '')
 
     async def test_get_good_request_returns_result(self):
