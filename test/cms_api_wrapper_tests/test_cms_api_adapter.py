@@ -1,5 +1,6 @@
 from unittest import TestCase, mock
 import os
+import asyncio
 
 from dotenv import load_dotenv
 
@@ -15,9 +16,10 @@ class TestCmsApiAdapter(TestCase):
         hostname = "cms-z.winlink.org"
         self.api_adapter = CmsApiAdapter(api_key, hostname)
         self.response = httpx.Response(200)
+        self.test_loop = asyncio.new_event_loop()
 
     def tearDown(self) -> None:
-        pass
+        self.test_loop.close()
 
     async def test__do_good_request_returns_result(self):
         self.response.status_code = 200

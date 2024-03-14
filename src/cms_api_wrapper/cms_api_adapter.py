@@ -11,6 +11,7 @@ class ApiResult:
     """
     The result of the API request
     """
+
     def __init__(self, error_code: str = "", error_message: str = "", data: List[Dict] = None):
         """
         The results returned from low-level CmsApiAdapter
@@ -23,11 +24,17 @@ class ApiResult:
         self.data = data if data else []
 
 
+class CmsApiError(Exception):
+    pass
+
+
 class WebServiceResponse:
     def __init__(self, result: ApiResult):
         self.error_code = result.error_code
         self.error_message = result.error_message
         self.has_error = self.error_code != ""
+        if self.has_error:
+            raise CmsApiError(f"{self.error_code}: {self.error_message}")
 
 
 # Internal class
@@ -36,6 +43,7 @@ class ResponseStatus:
     The ResponseStatus class is returned with all CMS API responses. It contains the result
     of the request. An empty error_code indicates success. Used internally.
     """
+
     def __init__(self, data: Dict):
         self.api_error_code = data["ErrorCode"] if data else ''
         self.api_error_message = data["Message"] if data else ''
@@ -83,19 +91,19 @@ class CmsApiAdapter:
             self._logger.error(msg=(str(e)))
             raise Exception("Request failed") from e
 
-        # Get JSON result, or return failed result on exception.
-        try:
-            data_out = response.json()
-        except (ValueError, JSONDecodeError) as e:
-            log_line = ', '.join((log_line_pre, f"success={False}, status_code={None}, message={e}"))
-            self._logger.error(msg=log_line)
-            raise Exception("Bad JSON in response") from e
-
         is_success = 299 >= response.status_code >= 200  # 200 to 299 is OK
         log_line = ', '.join((log_line_pre, f"success={is_success}, status_code={response.status_code}"))
 
         # If status_code in 200-299 range, return API result status and data, otherwise raise exception
         if is_success:
+            # Get JSON result, or return failed result on exception.
+            try:
+                data_out = response.json()
+            except (ValueError, JSONDecodeError) as e:
+                log_line = ', '.join((log_line_pre, f"success={False}, status_code={None}, message={e}"))
+                self._logger.error(msg=log_line)
+                raise Exception("Bad JSON in response") from e
+
             # Unpack response status returned from API call.
             response_status = ResponseStatus(data_out["ResponseStatus"])
             # Remove response status from data list -- data_out will just be the requested information.
