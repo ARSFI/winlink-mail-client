@@ -178,7 +178,7 @@ async def main():
 
     sysop = Sysop(api_key, hostname)
     try:
-        result = await sysop.sysop_add(callsign, password, "Ham Tester", "DM78QX", "account.email@home.com")
+        await sysop.sysop_add(callsign, password, "Ham Tester", "DM78QX", "account.email@home.com")
     except CmsApiError as error:
         print(f"Error: {error}")
 
