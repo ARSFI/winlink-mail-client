@@ -156,32 +156,37 @@ async def main():
     else:
         print(f"Account {test_callsign} is locked out: {result.is_locked_out} -- Reason: {result.lockout_reason}")
 
-    # !!!
-    #
-    # await account.set_max_message_size(callsign, 105)
-    # result = await account.get_max_message_size(callsign)
-    # if result.has_error:
-    #     print(f"Error: {result.error_code}/{result.error_message}")
-    # else:
-    #     print(f"Max message size: {result.max_message_size}")
-    # await account.set_max_message_size(callsign, 120)
-    #
-    # inquiries = Inquires(api_key, hostname)
-    # result = await inquiries.catalog_get()
-    # if result.has_error:
-    #     print(f"Error: {result.error_code}/{result.error_message}")
-    # else:
-    #     print(f"{len(result.inquiries)} items in the inquiry list")
-    #
-    # sysop = Sysop(api_key, hostname)
-    # result = await sysop.sysop_add(callsign, password, "Ham Tester", "DM78QX", "account.email@home.com")
-    # if result.has_error:
-    #     print(f"Error: {result.error_code}/{result.error_message}")
-    #
-    # result = await sysop.sysop_get(callsign, password)
-    # if result.has_error:
-    #     print(f"Error: {result.error_code}/{result.error_message}")
-    # else:
-    #     print(f"Sysop: {result.sysop_record.sysop_name}")
+    try:
+        await account.set_max_message_size(callsign, 105)
+        result = await account.get_max_message_size(callsign)
+    except CmsApiError as error:
+        print(f"Error: {error}")
+    else:
+        print(f"Max message size: {result.max_message_size}")
+    try:
+        await account.set_max_message_size(callsign, 120)
+    except CmsApiError:
+        pass
+
+    try:
+        inquiries = Inquires(api_key, hostname)
+        result = await inquiries.catalog_get()
+    except CmsApiError as error:
+        print(f"Error: {error}")
+    else:
+        print(f"{len(result.inquiries)} items in the inquiry list")
+
+    sysop = Sysop(api_key, hostname)
+    try:
+        result = await sysop.sysop_add(callsign, password, "Ham Tester", "DM78QX", "account.email@home.com")
+    except CmsApiError as error:
+        print(f"Error: {error}")
+
+    try:
+        result = await sysop.sysop_get(callsign, password)
+    except CmsApiError as error:
+        print(f"Error: {error}")
+    else:
+        print(f"Sysop: {result.sysop_record.sysop_name}")
 
 asyncio.run(main())
