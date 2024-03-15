@@ -28,7 +28,7 @@ class TestCmsApiAdapter(TestCase):
             result = await self.api_adapter._do('GET', '')
             self.assertIsInstance(result, ApiResult)
 
-    async def test__do_300_or_higher_raises_cns_api_exception(self):
+    async def test__do_300_or_higher_raises_cms_api_exception(self):
         self.response.status_code = 300
         self.response._content = '{"ResponseStatus":{}}'.encode()
         with mock.patch("httpx.request", return_value=self.response):
