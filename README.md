@@ -1,7 +1,7 @@
 # An Open Source Winlink Mail Client
 Open source cross platform email program for the winlink radio email system
 
-[![Discord Server Invite](https://img.shields.io/badge/DISCORD-JOIN%20SERVER-5663F7?style=for-the-badge&logo=discord&logoColor=white)]([https://bit.ly/heyfoss](https://discord.gg/DQ7BD4dKHq))
+[![Discord Server Invite](https://img.shields.io/badge/DISCORD-JOIN%20SERVER-5663F7?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/DQ7BD4dKHq)
 
 Now's your chance to help design a new cross-platform email client for Winlink. 
 Initially, this repository will be concerned with gathering ideas - your ideas. 
