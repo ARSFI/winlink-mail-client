@@ -6,7 +6,7 @@ Initially, this repository will be concerned with gathering ideas - your ideas.
 You can submit new ideas, comment on what others have suggested, or even tell us what you don't want.
 Use the 'Issues' menu item to open a page where you can make your suggestions and comments.
 
-Take part in the discussion on the Discord channel at: [https://discord.gg/ED8cerpx](https://discord.gg/ffHRUPwx)
+Take part in the discussion on the Discord channel at: https://discord.gg/DQ7BD4dKHq
 
 The [project wiki](https://github.com/ARSFI/winlink-mail-client/wiki) will be updated to reflect suggestions.
 
